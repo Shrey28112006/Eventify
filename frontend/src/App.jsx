@@ -1,7 +1,10 @@
 import { Link, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
-import EventPage from "./pages/EventPage.jsx";
+
+import EventsPage from "./pages/EventsPage.jsx";
+import EventDetailsPage from "./pages/EventDetailsPage.jsx";
+
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 
@@ -73,7 +76,9 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/event" element={<EventPage />} />
+        <Route path="/event" element={<EventsPage />} />
+        <Route path="/event/:id" element={<EventDetailsPage />} />
+
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
