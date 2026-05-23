@@ -1,4 +1,8 @@
 import { Link, Route, Routes } from "react-router-dom";
+import DashboardPage from "./pages/DashboardPage.jsx";
+import EventPage from "./pages/EventPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
 
 function Home() {
   return (
@@ -11,21 +15,27 @@ function Home() {
           Beginner-friendly MERN starter for event management
         </h1>
         <p className="mt-4 max-w-2xl text-lg">
-          React Vite, Tailwind CSS, React Router, Express.js, and MongoDB Atlas
-          are organized in a clean structure ready to scale.
+          React Vite, Tailwind CSS, React Router, Express.js, JWT auth, and
+          MongoDB Atlas are organized in a clean structure ready to scale.
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
           <Link
-            to="/"
+            to="/login"
             className="rounded-xl border-4 border-black bg-lime-300 px-5 py-3 font-bold shadow-[4px_4px_0_0_#000]"
           >
-            Home
+            Login
           </Link>
           <Link
-            to="/missing"
+            to="/signup"
             className="rounded-xl border-4 border-black bg-pink-300 px-5 py-3 font-bold shadow-[4px_4px_0_0_#000]"
           >
-            Test 404
+            Signup
+          </Link>
+          <Link
+            to="/dashboard"
+            className="rounded-xl border-4 border-black bg-sky-300 px-5 py-3 font-bold shadow-[4px_4px_0_0_#000]"
+          >
+            Dashboard
           </Link>
         </div>
       </section>
@@ -56,6 +66,10 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/event" element={<EventPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
