@@ -1,8 +1,16 @@
 import { Router } from "express";
 import { protect } from "../middleware/authMiddleware.js";
+import {
+  createEvent,
+  deleteEvent,
+  getAllEvents,
+  getEventById,
+  updateEvent
+} from "../controllers/eventController.js";
 
 const router = Router();
 
+// Home route
 router.get("/", (req, res) => {
   res.json({
     success: true,
@@ -10,15 +18,15 @@ router.get("/", (req, res) => {
   });
 });
 
-// Example protected route (used by EventPage)
-router.get("/dashboard", protect, (req, res) => {
-  res.json({
-    success: true,
-    message: "Protected event dashboard data loaded",
-    user: req.user
-  });
-});
+// Public read
+router.get("/all", getAllEvents);
+router.get("/:id", getEventById);
 
+// Protected write (beginner-friendly: only organizer can edit/delete)
+router.post("/", protect, createEvent);
+router.put("/:id", protect, updateEvent);
+router.delete("/:id", protect, deleteEvent);
 
 export default router;
+
 

@@ -4,6 +4,9 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 
 import EventsPage from "./pages/EventsPage.jsx";
 import EventDetailsPage from "./pages/EventDetailsPage.jsx";
+import EventManagePage from "./pages/EventManagePage.jsx";
+
+
 
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
@@ -78,8 +81,10 @@ export default function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/event" element={<EventsPage />} />
         <Route path="/event/:id" element={<EventDetailsPage />} />
+        <Route path="/manage-events" element={<EventManagePage />} />
 
         <Route path="*" element={<NotFound />} />
+
       </Route>
     </Routes>
   );
