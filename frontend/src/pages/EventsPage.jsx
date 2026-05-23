@@ -1,5 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000";
 
 const ALL_CATEGORIES = [
   "All",
@@ -9,70 +11,13 @@ const ALL_CATEGORIES = [
   "Sports",
   "Arts",
   "Education",
-  "Community"
-];
-
-const EVENTS = [
-  {
-    id: "1",
-    title: "Neon Night: Tech & Music",
-    category: "Tech",
-    date: "Aug 18",
-    venue: "Downtown Hall",
-    attendees: 1240,
-    shortDescription: "Network with builders + enjoy live synth sets."
-  },
-  {
-    id: "2",
-    title: "Founder Sprint: Business Talks",
-    category: "Business",
-    date: "Sep 02",
-    venue: "Innovation Center",
-    attendees: 780,
-    shortDescription: "Practical growth strategies from operators."
-  },
-  {
-    id: "3",
-    title: "Stadium Pulse: Community Sports",
-    category: "Sports",
-    date: "Sep 21",
-    venue: "City Stadium",
-    attendees: 1530,
-    shortDescription: "Friendly tournaments + meet the local teams."
-  },
-  {
-    id: "4",
-    title: "Canvas & Coffee: Art Workshop",
-    category: "Arts",
-    date: "Oct 05",
-    venue: "Art Loft",
-    attendees: 310,
-    shortDescription: "Create small masterpieces with modern techniques."
-  },
-  {
-    id: "5",
-    title: "Learn Loop: Education Meetup",
-    category: "Education",
-    date: "Oct 16",
-    venue: "Campus Hub",
-    attendees: 540,
-    shortDescription: "Hands-on learning sessions for curious minds."
-  },
-  {
-    id: "6",
-    title: "Open Community: Volunteering Day",
-    category: "Community",
-    date: "Nov 01",
-    venue: "Central Park",
-    attendees: 980,
-    shortDescription: "Team up and make a real local impact."
-  }
+  "Community",
 ];
 
 function EventCard({ event }) {
   return (
     <Link
-      to={`/event/${event.id}`}
+      to={`/event/${event._id}`}
       className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/60 hover:bg-white/8 focus:outline-none focus:ring-2 focus:ring-cyan-400"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/15 to-fuchsia-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -85,12 +30,14 @@ function EventCard({ event }) {
             </p>
             <h3 className="mt-2 text-lg font-black text-white">{event.title}</h3>
             <p className="mt-2 text-sm text-zinc-300">
-              {event.shortDescription}
+              {event.description}
             </p>
           </div>
           <div className="text-right">
             <p className="text-xs font-semibold text-zinc-400">Date</p>
-            <p className="text-sm font-bold text-white">{event.date}</p>
+            <p className="text-sm font-bold text-white">
+              {event.date ? new Date(event.date).toLocaleDateString() : "—"}
+            </p>
           </div>
         </div>
 
@@ -99,7 +46,7 @@ function EventCard({ event }) {
             {event.venue}
           </span>
           <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-zinc-200">
-            {event.attendees} going
+            {event.availableSeats} available
           </span>
         </div>
 
@@ -112,22 +59,53 @@ function EventCard({ event }) {
 export default function EventsPage() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [events, setEvents] = useState([]);
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        setIsLoading(true);
+        setMessage("");
+
+        // Pull all then filter in UI for beginner simplicity.
+        const res = await fetch(`${API_URL}/api/event/all`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to fetch events");
+
+        // backend returns: { success, events }
+        setEvents(data.events || []);
+      } catch (err) {
+        setMessage(err.message || "Failed to load events");
+      } finally {
+        setIsLoading(false);
+      }
+
+      // Debugging helper (uncomment if needed):
+      // console.log("Events API response:", data);
+    }
+
+
+    fetchEvents();
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    return EVENTS.filter((e) => {
+    return events.filter((e) => {
       const categoryOk =
         activeCategory === "All" ? true : e.category === activeCategory;
 
       const queryOk =
         !q ||
         e.title.toLowerCase().includes(q) ||
-        e.shortDescription.toLowerCase().includes(q);
+        (e.description || "").toLowerCase().includes(q);
 
       return categoryOk && queryOk;
     });
-  }, [query, activeCategory]);
+  }, [events, query, activeCategory]);
+
 
   return (
     <section className="rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-7">

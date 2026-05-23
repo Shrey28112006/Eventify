@@ -5,10 +5,11 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import EventsPage from "./pages/EventsPage.jsx";
 import EventDetailsPage from "./pages/EventDetailsPage.jsx";
 import EventManagePage from "./pages/EventManagePage.jsx";
-
+import MyBookingsPage from "./pages/MyBookingsPage.jsx";
 
 
 import LoginPage from "./pages/LoginPage.jsx";
+
 import SignupPage from "./pages/SignupPage.jsx";
 
 function Home() {
@@ -23,11 +24,11 @@ function Home() {
       </p>
 
       <h1 className="relative text-4xl font-black leading-tight sm:text-5xl">
-        Beginner-friendly MERN starter for event management
+        Discover events happening near you
       </h1>
       <p className="relative mt-4 max-w-2xl text-lg text-zinc-300">
-        React Router, Express, MongoDB, JWT auth, and a modern Tailwind UI are
-        organized in a clean structure ready to scale.
+        Browse, book tickets, and manage your plans in one place—built for
+        fast event discovery and smooth checkout.
       </p>
 
       <div className="relative mt-8 flex flex-wrap gap-4">
@@ -82,8 +83,10 @@ export default function App() {
         <Route path="/event" element={<EventsPage />} />
         <Route path="/event/:id" element={<EventDetailsPage />} />
         <Route path="/manage-events" element={<EventManagePage />} />
+        <Route path="/my-bookings" element={<MyBookingsPage />} />
 
         <Route path="*" element={<NotFound />} />
+
 
       </Route>
     </Routes>

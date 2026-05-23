@@ -74,10 +74,14 @@ export default function Navbar() {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/event">Events</NavLink>
           {isAuthed ? (
-            <NavLink to="/dashboard">Dashboard</NavLink>
+            <>
+              <NavLink to="/dashboard">Dashboard</NavLink>
+              <NavLink to="/my-bookings">My bookings</NavLink>
+            </>
           ) : (
             <NavLink to="/login">Login</NavLink>
           )}
+
 
           {isAuthed ? (
             <button
