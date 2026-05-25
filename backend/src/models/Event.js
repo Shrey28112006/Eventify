@@ -32,6 +32,13 @@ const eventSchema = new mongoose.Schema(
       required: [true, "Capacity is required"],
       min: [0, "Capacity must be a positive number"]
     },
+    // Seats left for booking; initialized from `capacity`
+    availableSeats: {
+      type: Number,
+      required: true,
+      min: [0, "availableSeats must be a positive number"],
+    },
+
     organizer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

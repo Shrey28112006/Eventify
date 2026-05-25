@@ -1,32 +1,57 @@
 import { Router } from "express";
 import { protect } from "../middleware/authMiddleware.js";
+
 import {
   createEvent,
   deleteEvent,
   getAllEvents,
   getEventById,
-  updateEvent
+  getMyEvents,
+  updateEvent,
 } from "../controllers/eventController.js";
 
 const router = Router();
 
-// Home route
+/* TEST ROUTE */
 router.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Eventify event route is running"
+    message: "Eventify event route is running",
   });
 });
 
-// Public read
+/* PUBLIC ROUTES */
 router.get("/all", getAllEvents);
+
+/* PRIVATE ROUTES */
+router.get(
+  "/my-events",
+  protect,
+  getMyEvents
+);
+
+/* PUBLIC SINGLE EVENT */
 router.get("/:id", getEventById);
 
-// Protected write (beginner-friendly: only organizer can edit/delete)
-router.post("/", protect, createEvent);
-router.put("/:id", protect, updateEvent);
-router.delete("/:id", protect, deleteEvent);
+/* CREATE EVENT */
+router.post(
+  "/",
+  protect,
+  createEvent
+);
+
+/* UPDATE EVENT */
+router.put(
+  "/:id",
+  protect,
+  updateEvent
+);
+
+/* DELETE EVENT */
+router.delete(
+  "/:id",
+  protect,
+  deleteEvent
+);
 
 export default router;
-
-

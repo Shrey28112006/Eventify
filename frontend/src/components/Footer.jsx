@@ -7,7 +7,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Eventify. All rights reserved.
           </p>
           <div className="text-sm text-zinc-400">
-            Built with React, Tailwind, Express, MongoDB, and JWT.
+            Explore events that match your vibe.
           </div>
         </div>
       </div>

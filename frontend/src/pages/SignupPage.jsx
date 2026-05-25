@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { saveToken } from "../utils/auth.js";
-
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000";
+import { apiFetch } from "../utils/api";
 
 function SignupPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,24 +24,18 @@ function SignupPage() {
     setMessage("");
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/signup`, {
+      const data = await apiFetch("/api/auth/signup", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Signup failed");
-      }
 
       saveToken(data.token);
       navigate("/dashboard");
     } catch (error) {
-      setMessage(error.message);
+      setMessage(error?.message || "Signup failed");
     } finally {
       setIsLoading(false);
     }
@@ -55,9 +48,7 @@ function SignupPage() {
           Signup
         </p>
         <h1 className="text-3xl font-black">Create your account</h1>
-        <p className="mt-2 text-sm text-slate-700">
-          Join Eventify and start managing events.
-        </p>
+        <p className="mt-2 text-sm text-slate-700">Join Eventify and start managing events.</p>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <label className="block">
@@ -123,3 +114,4 @@ function SignupPage() {
 }
 
 export default SignupPage;
+

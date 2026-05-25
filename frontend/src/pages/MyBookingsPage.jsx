@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getToken } from "../utils/auth.js";
-
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000";
+import { apiFetch } from "../utils/api";
 
 export default function MyBookingsPage() {
   const token = getToken();
@@ -17,17 +16,14 @@ export default function MyBookingsPage() {
         return;
       }
 
-      const res = await fetch(`${API_URL}/api/booking/me`, {
+      const data = await apiFetch("/api/booking/me", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to fetch bookings");
-
       setBookings(data.bookings || []);
     } catch (err) {
-      setMessage(err.message);
+      setMessage(err?.message || "Failed to load bookings");
     } finally {
       setIsLoading(false);
     }
